@@ -2,6 +2,7 @@ import { View, StyleSheet, Button } from "react-native";
 import Animated, {
     useSharedValue,
     withTiming,
+    withSpring,
     useAnimatedStyle,
     Easing,
 } from 'react-native-reanimated';
@@ -10,6 +11,7 @@ import MainButton from "../components/MainButton";
 
 function MainPage() {
     const randomWidth = useSharedValue(10);
+    const randX = useSharedValue(0);
 
     const config = {
         duration: 500,
@@ -19,6 +21,8 @@ function MainPage() {
     const style = useAnimatedStyle(() => {
         return {
             width: withTiming(randomWidth.value, config),
+            transform: [{translateX: withSpring(randX.value, {stiffness: 100})}]
+            //transform: [{translateX: randX.value}]
         };
     });
 
@@ -29,6 +33,10 @@ function MainPage() {
                 title="toggle"
                 onPress={() => {
                     randomWidth.value = Math.random() * 350;
+                    randX.value = Math.random() * 100;
+                    if(Math.random() < .5) {
+                        randX.value *= -1;
+                    }
                 }}
             />
             <MainButton>Main Page</MainButton>
@@ -49,7 +57,7 @@ const styles = StyleSheet.create({
     box: {
         width: 100,
         height: 80,
-        backgroundColor: "black",
+        backgroundColor: "blue",
         margin: 30
     }
 });
